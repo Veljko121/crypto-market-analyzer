@@ -1,6 +1,7 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import mean
 import sys
+from datetime import datetime
 
 def main():
     transformed_csv = sys.argv[1]
@@ -17,7 +18,7 @@ def main():
 
     avg_price = df.select(mean("price")).first()[0]
 
-    avg_df = spark.createDataFrame([(float(avg_price),)], ["average_price"])
+    avg_df = spark.createDataFrame([(float(avg_price), datetime.now())], ["average_price", "date_time"])
 
     avg_df.write.format("mongodb") \
         .mode("overwrite") \
