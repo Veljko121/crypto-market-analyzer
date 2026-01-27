@@ -15,4 +15,7 @@ docker compose -f mongodb/docker-compose.yml up -d
 echo ">> Starting up Airflow"
 docker compose -f airflow/docker-compose.yml up -d
 
+echo ">> Starting up Metabase"
+docker compose -f metabase/docker-compose.yml up -d
+
 echo Cluster is up!
