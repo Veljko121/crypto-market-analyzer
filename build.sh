@@ -13,4 +13,4 @@ echo ">> Pulling and building Airflow images"
 docker compose -f airflow/docker-compose.yml pull
 docker compose -f airflow/docker-compose.yml build
 
-echo All images pulled!
+echo All images pulled and built!
