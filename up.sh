@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo ">> Creating crypto-analyzer network"
-docker network crypto-analyzer
+docker network create crypto-analyzer
 
 echo ">> Starting up HDFS"
 docker compose -f hdfs/docker-compose.yml up -d
