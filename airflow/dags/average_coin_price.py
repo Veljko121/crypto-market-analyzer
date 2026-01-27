@@ -1,5 +1,5 @@
 from airflow.sdk import dag, task
-from utils import spark_submit
+from utils import spark_submit, get_hdfs_host, get_mongo_host
 
 @dag(
     dag_id="average_coin_price",
@@ -9,9 +9,13 @@ from utils import spark_submit
 def bash_spark_test():
 
     @task.bash
-    def method():
-        return spark_submit("my_jobs/avg_price.py")
+    def calculate_average_price():
+        transformed_csv = get_hdfs_host() + "/transformed_data/transformed.csv"
+        mongo_host = get_mongo_host()
+        mongo_db = "crypto"
+        command = spark_submit("my_jobs/average_price.py", packages=["org.mongodb.spark:mongo-spark-connector_2.13:10.6.0"], args=[transformed_csv, mongo_host, mongo_db])
+        return command
     
-    method()
+    calculate_average_price()
 
 bash_spark_test()

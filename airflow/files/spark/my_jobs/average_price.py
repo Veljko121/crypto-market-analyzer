@@ -1,20 +1,29 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import mean
+import sys
 
 def main():
-    spark = SparkSession.builder.appName("avg_coin_price").getOrCreate()
+    transformed_csv = sys.argv[1]
+    mongo_host = sys.argv[2]
+    mongo_db = sys.argv[3]
 
-    print("📂 Reading data from HDFS...")
+    spark = SparkSession.builder.appName("avg_coin_price").config("spark.mongodb.write.connection.uri", mongo_host).getOrCreate()
+
     df = spark.read.csv(
-        "webhdfs://namenode:9870/raw_data/historical.csv",
+        transformed_csv,
         header=True,
         inferSchema=True
     )
 
-    print(f"✅ Loaded {df.count()} rows")
+    avg_price = df.select(mean("price")).first()[0]
 
-    avg_price = df.select(mean("price")).collect()[0][0]
-    print(f"📊 Average coin price: ${avg_price:.2f}")
+    avg_df = spark.createDataFrame([(float(avg_price),)], ["average_price"])
+
+    avg_df.write.format("mongodb") \
+        .mode("overwrite") \
+        .option("database", mongo_db) \
+        .option("collection", "average_prices") \
+        .save()
 
     spark.stop()
     
