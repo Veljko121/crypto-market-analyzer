@@ -12,4 +12,7 @@ docker compose -f spark/docker-compose.yml down
 echo ">> Shutting down HDFS"
 docker compose -f hdfs/docker-compose.yml down
 
+echo ">> Removing crypto-analyzer network"
+docker network rm crypto-analyzer
+
 echo Cluster is down.
