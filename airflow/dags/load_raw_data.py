@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from airflow.sdk import dag, task
 from airflow.providers.apache.hdfs.hooks.webhdfs import WebHDFSHook
 import os
