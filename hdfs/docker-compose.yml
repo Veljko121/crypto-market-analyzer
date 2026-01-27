@@ -52,11 +52,7 @@ services:
     environment:
       - WAITFOR=namenode:9870
     volumes:
-      - data-dir-3:/data
-
-  spark-master:
-    image: spark:python3
-    
+      - data-dir-3:/data    
 
 volumes:
   name-dir:
