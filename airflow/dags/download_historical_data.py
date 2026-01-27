@@ -1,5 +1,3 @@
-# curl -L -o ~/Downloads/coinmarketcap-historical-data.zip https://www.kaggle.com/api/v1/datasets/download/bizzyvinci/coinmarketcap-historical-data
-
 from datetime import datetime
 import os
 from airflow.decorators import dag, task
