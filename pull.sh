@@ -12,4 +12,4 @@ docker compose -f mongodb/docker-compose.yml pull
 echo ">> Pulling Airflow images"
 docker compose -f airflow/docker-compose.yml pull
 
-echo Cluster is up!
+echo All images pulled!
