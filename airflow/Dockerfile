@@ -15,4 +15,5 @@ ARG PYSPARK_VERSION=4.0.1
 USER root
 RUN apt-get update && apt-get install libkrb5-dev gcc -y --no-install-recommends
 USER airflow
-RUN pip install pyspark==${PYSPARK_VERSION} apache-airflow-providers-apache-hdfs
+COPY docker-requirements.txt ./requirements.txt
+RUN pip install -r requirements.txt
