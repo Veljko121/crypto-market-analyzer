@@ -1,0 +1,5 @@
+apache-airflow
+apache-airflow-providers-apache-hdfs
+apache-airflow-providers-apache-spark
+apache-airflow-providers-common-compat
+pyspark
