@@ -2,25 +2,21 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import mean
 import sys
 from datetime import datetime
+from pyspark.sql.functions import lit
 
 def main():
-    transformed_csv = sys.argv[1]
+    transformed_parquet = sys.argv[1]
     mongo_host = sys.argv[2]
     mongo_db = sys.argv[3]
 
     spark = SparkSession.builder.appName("avg_coin_price").config("spark.mongodb.write.connection.uri", mongo_host).getOrCreate()
 
-    df = spark.read.csv(
-        transformed_csv,
-        header=True,
-        inferSchema=True
-    )
+    df = spark.read.parquet(transformed_parquet)
 
-    avg_price = df.select(mean("price")).first()[0]
+    avg_price_df = df.groupBy("id", "name").agg(mean("price").alias("average_price"))
+    avg_price_df = avg_price_df.withColumn("date_time", lit(datetime.now()))
 
-    avg_df = spark.createDataFrame([(float(avg_price), datetime.now())], ["average_price", "date_time"])
-
-    avg_df.write.format("mongodb") \
+    avg_price_df.write.format("mongodb") \
         .mode("overwrite") \
         .option("database", mongo_db) \
         .option("collection", "average_prices") \

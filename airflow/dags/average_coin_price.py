@@ -10,7 +10,7 @@ def bash_spark_test():
 
     @task.bash
     def calculate_average_price():
-        transformed_csv = HDFS_HOST + "/transformed_data/transformed.csv"
+        transformed_csv = HDFS_HOST + "/transformed_data/transformed.parquet"
         mongo_host = MONGO_HOST
         mongo_db = "crypto"
         command = spark_submit("my_jobs/average_price.py", packages=["org.mongodb.spark:mongo-spark-connector_2.13:10.6.0"], args=[transformed_csv, mongo_host, mongo_db])
