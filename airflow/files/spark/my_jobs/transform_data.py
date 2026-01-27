@@ -35,7 +35,7 @@ def main():
         df_historical.market_cap
     )
 
-    result.write.csv(transformed_data_folder + "/transformed.csv")
+    result.write.csv(transformed_data_folder + "/transformed.csv", header=True, mode="overwrite")
 
 if __name__ == "__main__":
     main()
