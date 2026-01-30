@@ -9,6 +9,12 @@ x-hdfs-common: &hdfs-common
       soft: 65536
       hard: 65536
 
+x-datanode-common: &datanode-common
+  <<: *hdfs-common
+  command: hdfs datanode
+  environment:
+    - WAITFOR=namenode:9870
+
 services:
   
   namenode:
@@ -22,29 +28,20 @@ services:
       - name-dir:/data
 
   datanode-1:
-    <<: *hdfs-common
-    command: hdfs datanode
+    <<: *datanode-common
     container_name: datanode-1
-    environment:
-      - WAITFOR=namenode:9870
     volumes:
       - data-dir-1:/data
 
   datanode-2:
-    <<: *hdfs-common
-    command: hdfs datanode
+    <<: *datanode-common
     container_name: datanode-2
-    environment:
-      - WAITFOR=namenode:9870
     volumes:
       - data-dir-2:/data
 
   datanode-3:
-    <<: *hdfs-common
-    command: hdfs datanode
+    <<: *datanode-common
     container_name: datanode-3
-    environment:
-      - WAITFOR=namenode:9870
     volumes:
       - data-dir-3:/data    
 
