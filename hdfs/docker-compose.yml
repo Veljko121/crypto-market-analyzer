@@ -1,54 +1,48 @@
+x-hdfs-common: &hdfs-common
+  image: apache/hadoop:3.4.2
+  env_file:
+    - .env
+  networks:
+    - crypto-analyzer
+  ulimits:
+    nofile:
+      soft: 65536
+      hard: 65536
+
 services:
   
   namenode:
-    image: apache/hadoop:3.4.2
+    <<: *hdfs-common
     command: hdfs namenode
     container_name: namenode
-    env_file:
-      - .env
     environment:
       - ENSURE_NAMENODE_DIR=/data/name
     ports: [ 9870:9870 ]
-    networks:
-      - crypto-analyzer
     volumes:
       - name-dir:/data
 
   datanode-1:
-    image: apache/hadoop:3.4.2
+    <<: *hdfs-common
     command: hdfs datanode
     container_name: datanode-1
-    env_file:
-      - .env
-    networks:
-      - crypto-analyzer
     environment:
       - WAITFOR=namenode:9870
     volumes:
       - data-dir-1:/data
 
   datanode-2:
-    image: apache/hadoop:3.4.2
+    <<: *hdfs-common
     command: hdfs datanode
     container_name: datanode-2
-    env_file:
-      - .env
-    networks:
-      - crypto-analyzer
     environment:
       - WAITFOR=namenode:9870
     volumes:
       - data-dir-2:/data
 
   datanode-3:
-    image: apache/hadoop:3.4.2
+    <<: *hdfs-common
     command: hdfs datanode
     container_name: datanode-3
-    user: root
-    env_file:
-      - .env
-    networks:
-      - crypto-analyzer
     environment:
       - WAITFOR=namenode:9870
     volumes:
