@@ -1,4 +1,4 @@
-ARG AIRFLOW_IMAGE_TAG=3.1.6-python3.10
+ARG AIRFLOW_IMAGE_TAG=3.2.0-python3.10
 FROM apache/airflow:${AIRFLOW_IMAGE_TAG}
 
 # Java configuration

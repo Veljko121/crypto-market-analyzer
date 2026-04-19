@@ -1,5 +1,5 @@
 x-spark-common: &spark-common
-  image: spark:4.0.1-java21-python3
+  image: spark:4.1.1-java21-python3
   networks:
     - crypto-analyzer
 
