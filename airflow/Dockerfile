@@ -11,7 +11,7 @@ ENV JAVA_HOME=/
 ENV PATH=$JAVA_HOME/bin:$PATH
 
 # PySpark configuration
-ARG PYSPARK_VERSION=4.0.1
+ARG PYSPARK_VERSION=4.1.1
 USER root
 RUN apt-get update && apt-get install libkrb5-dev gcc -y --no-install-recommends
 USER airflow
