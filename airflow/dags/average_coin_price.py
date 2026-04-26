@@ -6,7 +6,7 @@ from utils import spark_submit, HDFS_HOST, MONGO_HOST
     schedule=None,
     catchup=False,
 )
-def bash_spark_test():
+def average_price():
 
     @task.bash
     def calculate_average_price():
@@ -18,4 +18,4 @@ def bash_spark_test():
     
     calculate_average_price()
 
-bash_spark_test()
+average_price()
