@@ -31,8 +31,7 @@ def main():
         df_coins.name.alias("name"),
         to_date(df_historical.date).alias("date"),
         df_historical.price,
-        df_historical.cmc_rank,
-        df_historical.market_cap
+        df_historical.circulating_supply,
     )
 
     result.write.parquet(transformed_data_folder + "/transformed.parquet", mode="overwrite")
