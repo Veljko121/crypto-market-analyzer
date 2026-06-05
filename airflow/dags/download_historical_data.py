@@ -6,8 +6,8 @@ import urllib.request
 import zipfile
 
 @dag(
-    dag_id="download_historical_data",
-    description="This DAG downloads historical data from Kaggle",
+    dag_id="download_and_load_historical_data",
+    description="This DAG downloads historical data from Kaggle and loads it to HDFS.",
     start_date=datetime(2026, 1, 26),
     catchup=False,
     schedule=None
@@ -31,11 +31,11 @@ def download_historical_data_dag():
         return extracted_data_path
 
     @task
-    def load_data(local_path: str):
+    def load_data_to_hdfs(data_local_path: str):
         hdfs_hook = WebHDFSHook(webhdfs_conn_id="HDFS_CONNECTION")
         data_hdfs_path = "/raw_data/"
         hdfs_hook.load_file(
-            source=local_path, destination=data_hdfs_path, overwrite=True
+            source=data_local_path, destination=data_hdfs_path, overwrite=True
         )
         return data_hdfs_path
 
@@ -49,7 +49,7 @@ def download_historical_data_dag():
 
     data_local_path = download_data()
     extracted_data_path = unzip_historical_data(data_local_path)
-    data_hdfs_path = load_data(extracted_data_path)
+    data_hdfs_path = load_data_to_hdfs(extracted_data_path)
     check_hdfs_file(data_hdfs_path)
 
 
