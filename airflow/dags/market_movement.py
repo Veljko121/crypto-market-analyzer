@@ -1,6 +1,5 @@
 from airflow.sdk import dag, task, Param
-from utils import spark_submit, HDFS_HOST, MONGO_HOST
-import os
+from utils import spark_submit, HDFS_HOST, MONGO_HOST, transform_raw_csv_data
 
 @dag(
     dag_id="market_movement",
@@ -17,20 +16,14 @@ def market_movement():
         transform_data_boolean = bool(context["params"]["transform_data"])
         if not transform_data_boolean:
             return 'echo "Skipping transform"'
-        raw_data_folder = HDFS_HOST + "/raw_data"
-        coins_csv = raw_data_folder + "/coins.csv"
-        historical_csv = raw_data_folder + "/historical.csv"
-        transformed_data_folder = HDFS_HOST + "/transformed_data/transformed_data_csv"
-        spark_job_path = "my_jobs/transform_csv_data.py"
-        command = spark_submit(spark_job_path, args=[coins_csv, historical_csv, transformed_data_folder])
-        return command
+        return transform_raw_csv_data()
 
     @task.bash
     def calculate_market_movement(**context):
         params = context["params"]
         start_date = params["start_date"]
         end_date = params["end_date"]
-        csv_data = HDFS_HOST + "/transformed_data/transformed_data_csv/historical.csv"
+        csv_data = HDFS_HOST + "/transformed_data/csv/historical.csv"
         mongo_host = MONGO_HOST
         mongo_db = "crypto"
         command = spark_submit("my_jobs/market_movement.py", packages=["org.mongodb.spark:mongo-spark-connector_2.13:10.6.0"], args=[csv_data, start_date, end_date, mongo_host, mongo_db])

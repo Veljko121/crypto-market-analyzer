@@ -13,3 +13,12 @@ def spark_submit(job_path: str, master: Connection = Connection.get("SPARK_CONNE
     for arg in args:
         command += f" {arg}"
     return command
+
+def transform_raw_csv_data() -> str:
+    raw_data_folder = HDFS_HOST + "/raw_data"
+    coins_csv = raw_data_folder + "/coins.csv"
+    historical_csv = raw_data_folder + "/historical.csv"
+    transformed_data_folder = HDFS_HOST + "/transformed_data/transformed_data_csv"
+    spark_job_path = "my_jobs/transform_csv_data.py"
+    command = spark_submit(spark_job_path, args=[coins_csv, historical_csv, transformed_data_folder])
+    return command
