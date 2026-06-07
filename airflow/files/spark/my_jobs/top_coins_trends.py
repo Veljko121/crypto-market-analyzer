@@ -17,7 +17,7 @@ def main():
     points_per_coin = max_data_points / number_of_coins
     total_days = (datetime.strptime(end_date, "%Y-%m-%d") - datetime.strptime(start_date, "%Y-%m-%d")).days
 
-    spark = SparkSession.builder.appName("top_5_coins_trends").config("spark.mongodb.write.connection.uri", mongo_host).getOrCreate()
+    spark = SparkSession.builder.appName("top_coins_trends").config("spark.mongodb.write.connection.uri", mongo_host).getOrCreate()
 
     historical_df = spark.read.csv(historical_data_path, inferSchema=True, header=True)
     coins_df = spark.read.csv(coins_data_path, inferSchema=True, header=True)
@@ -82,7 +82,7 @@ def main():
     )
 
     # Writing results
-    result_downsampled.write.format("mongodb").mode("overwrite").option("database", mongo_db).option("collection", "top_5_trends").save()
+    result_downsampled.write.format("mongodb").mode("overwrite").option("database", mongo_db).option("collection", "top_coins_trends").save()
 
     spark.stop()
 

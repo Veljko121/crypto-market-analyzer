@@ -2,7 +2,7 @@ from airflow.sdk import dag, task, Param
 from utils import spark_submit, HDFS_HOST, MONGO_HOST, transform_raw_csv_data
 
 @dag(
-    dag_id="top_5_coins_trends",
+    dag_id="top_coins_trends",
     schedule=None,
     catchup=False,
     params={
@@ -12,7 +12,7 @@ from utils import spark_submit, HDFS_HOST, MONGO_HOST, transform_raw_csv_data
         "number_of_coins": Param(5, type="number"),
     }
 )
-def top_5_coins_trends():
+def top_coins_trends():
 
     @task.bash
     def transform_data(**context) -> str:
@@ -22,7 +22,7 @@ def top_5_coins_trends():
         return transform_raw_csv_data()
     
     @task.bash
-    def calculate_top_5_trends(**context):
+    def calculate_top_coins_trends(**context):
         params = context["params"]
         start_date = params["start_date"]
         end_date = params["end_date"]
@@ -31,9 +31,9 @@ def top_5_coins_trends():
         coins_data = HDFS_HOST + "/transformed_data/csv/coins.csv"
         mongo_host = MONGO_HOST
         mongo_db = "crypto"
-        command = spark_submit("my_jobs/top_5_coins_trends.py", packages=["org.mongodb.spark:mongo-spark-connector_2.13:10.6.0"], args=[historical_data, coins_data, start_date, end_date, number_of_coins, mongo_host, mongo_db])
+        command = spark_submit("my_jobs/top_coins_trends.py", packages=["org.mongodb.spark:mongo-spark-connector_2.13:10.6.0"], args=[historical_data, coins_data, start_date, end_date, number_of_coins, mongo_host, mongo_db])
         return command
     
-    transform_data() >> calculate_top_5_trends()
+    transform_data() >> calculate_top_coins_trends()
 
-top_5_coins_trends()
+top_coins_trends()
