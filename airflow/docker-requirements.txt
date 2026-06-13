@@ -1,2 +1,3 @@
 pyspark==4.1.1
 apache-airflow-providers-apache-hdfs
+kafka-python-ng
