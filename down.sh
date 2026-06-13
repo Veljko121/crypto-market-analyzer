@@ -3,6 +3,9 @@
 echo ">> Shutting down Metabase"
 docker compose -f metabase/docker-compose.yml down
 
+echo ">> Shutting down Kafka"
+docker compose -f kafka/docker-compose.yml down
+
 echo ">> Shutting down Airflow"
 docker compose -f airflow/docker-compose.yml down
 
