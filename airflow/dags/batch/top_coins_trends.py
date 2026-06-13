@@ -2,7 +2,7 @@ from airflow.sdk import dag, task, Param
 from utils import spark_submit, HDFS_HOST, MONGO_HOST, transform_raw_csv_data
 
 @dag(
-    dag_id="market_cap_distrubition",
+    dag_id="top_coins_trends",
     schedule=None,
     catchup=False,
     params={
@@ -10,9 +10,10 @@ from utils import spark_submit, HDFS_HOST, MONGO_HOST, transform_raw_csv_data
         "start_date": Param("2013-04-28", type="string", format="date"),
         "end_date": Param("2021-07-31", type="string", format="date"),
         "number_of_coins": Param(5, type="number"),
-    }
+    },
+    tags=["batch"],
 )
-def market_cap_distrubition():
+def top_coins_trends():
 
     @task.bash
     def transform_data(**context) -> str:
@@ -22,7 +23,7 @@ def market_cap_distrubition():
         return transform_raw_csv_data()
     
     @task.bash
-    def calculate_market_cap_distrubition(**context):
+    def calculate_top_coins_trends(**context):
         params = context["params"]
         start_date = params["start_date"]
         end_date = params["end_date"]
@@ -31,9 +32,9 @@ def market_cap_distrubition():
         coins_data = HDFS_HOST + "/transformed_data/csv/coins.csv"
         mongo_host = MONGO_HOST
         mongo_db = "crypto"
-        command = spark_submit("my_jobs/market_cap_distrubition.py", packages=["org.mongodb.spark:mongo-spark-connector_2.13:10.6.0"], args=[historical_data, coins_data, start_date, end_date, number_of_coins, mongo_host, mongo_db])
+        command = spark_submit("my_jobs/top_coins_trends.py", packages=["org.mongodb.spark:mongo-spark-connector_2.13:10.6.0"], args=[historical_data, coins_data, start_date, end_date, number_of_coins, mongo_host, mongo_db])
         return command
     
-    transform_data() >> calculate_market_cap_distrubition()
+    transform_data() >> calculate_top_coins_trends()
 
-market_cap_distrubition()
+top_coins_trends()
