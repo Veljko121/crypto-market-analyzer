@@ -5,6 +5,7 @@ from utils import spark_submit, HDFS_HOST, MONGO_HOST
     dag_id="average_coin_price",
     schedule=None,
     catchup=False,
+    tags=["batch"],
 )
 def average_price():
 
