@@ -1,7 +1,5 @@
-from airflow.decorators import dag, task
 from airflow.sdk import dag, task
 from utils import spark_submit, MONGO_HOST
-import os
 
 @dag(
     dag_id="current_price_vs_historical_price",
@@ -12,7 +10,7 @@ import os
 def current_price_vs_historical_price():
 
     @task.bash(execution_timeout=None)
-    def run_stream():
+    def calculate_price_deviation():
         kafka_host = "broker-1:9092,broker-2:9092"
         topic = "crypto_prices_live"
         mongo_host = MONGO_HOST
@@ -27,6 +25,6 @@ def current_price_vs_historical_price():
         )
         return command
 
-    run_stream()
+    calculate_price_deviation()
 
 current_price_vs_historical_price()
