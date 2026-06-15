@@ -81,7 +81,6 @@ def main():
         .drop("rn", "step")
     )
 
-    # Writing results
     result_downsampled.write.format("mongodb").mode("overwrite").option("database", mongo_db).option("collection", "top_coins_trends").save()
 
     spark.stop()
