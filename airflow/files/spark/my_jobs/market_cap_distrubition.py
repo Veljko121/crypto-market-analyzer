@@ -14,8 +14,6 @@ def main():
     mongo_db = sys.argv[7]
 
     max_data_points = 2000
-    points_per_coin = max_data_points / number_of_coins
-    total_days = (datetime.strptime(end_date, "%Y-%m-%d") - datetime.strptime(start_date, "%Y-%m-%d")).days
 
     spark = SparkSession.builder.appName("top_coins_trends").config("spark.mongodb.write.connection.uri", mongo_host).getOrCreate()
 

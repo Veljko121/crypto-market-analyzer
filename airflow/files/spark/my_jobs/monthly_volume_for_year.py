@@ -27,7 +27,6 @@ def main():
         .withColumn("volume", coalesce(col("volume_24h"), lit(0.0)))
     )
 
-    # Prosečni dnevni volumen po mesecu (suma svih coina po danu, pa prosek po mesecu)
     df_daily_total = (
         df
         .groupBy("date")
@@ -42,7 +41,6 @@ def main():
         .orderBy("month")
     )
 
-    # Godišnji prosek kao window funkcija
     yearly_window = Window.rowsBetween(Window.unboundedPreceding, Window.unboundedFollowing)
 
     result = (

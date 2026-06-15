@@ -59,7 +59,6 @@ def main():
         .withColumn("market_cap", col("current_price") * col("circulating_supply"))
     )
 
-    # Privremeno - ispiši u konzolu da proverimo join
     query = (
         result_df
         .drop(historical_avg_df["name"])

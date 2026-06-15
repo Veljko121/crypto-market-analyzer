@@ -42,7 +42,6 @@ def main():
         .select("coin_id", "name")
     )
 
-    # Find top coins
     df_top_coins = (
         df
         .join(df_top_coins.select("coin_id"), on="coin_id", how="inner")
