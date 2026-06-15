@@ -2,7 +2,8 @@ from airflow.sdk import dag, task
 from utils import spark_submit, HDFS_HOST
 
 @dag(
-    dag_id="transform_raw_data_to_parquet"
+    dag_id="transform_raw_data_to_parquet",
+    tags=["transformation"]
 )
 def transform_raw_data_to_parquet():
 

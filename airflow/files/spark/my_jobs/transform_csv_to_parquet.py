@@ -32,6 +32,7 @@ def main():
         to_date(df_historical.date).alias("date"),
         df_historical.price,
         df_historical.circulating_supply,
+        df_historical.volume_24h,
     )
 
     result.write.parquet(transformed_data_folder + "/transformed.parquet", mode="overwrite")

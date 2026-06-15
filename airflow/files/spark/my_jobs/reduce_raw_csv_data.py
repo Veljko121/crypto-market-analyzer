@@ -11,7 +11,7 @@ def main():
     df_coins = spark.read.csv(path=coins_csv_path, header=True, inferSchema=True)
     df_historical = spark.read.csv(path=historical_csv_path, header=True, inferSchema=True)
 
-    historical_result = df_historical.select("date", "coin_id", "price", "circulating_supply")
+    historical_result = df_historical.select("date", "coin_id", "price", "circulating_supply", "volume_24h")
     coins_result = df_coins.select("id", "name")
 
     coins_result.write.csv(transformed_data_folder + "/coins.csv", mode="overwrite", header=True)

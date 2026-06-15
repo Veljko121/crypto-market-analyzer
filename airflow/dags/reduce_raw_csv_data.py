@@ -4,7 +4,8 @@ from utils import spark_submit, HDFS_HOST
 @dag(
     dag_id="reduce_raw_csv_data",
     schedule=None,
-    catchup=False
+    catchup=False,
+    tags=["transformation"]
 )
 def reduce_raw_csv_data():
 
