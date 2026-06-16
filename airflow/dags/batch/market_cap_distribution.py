@@ -2,7 +2,7 @@ from airflow.sdk import dag, task, Param
 from utils import spark_submit, HDFS_HOST, MONGO_HOST, transform_raw_csv_data
 
 @dag(
-    dag_id="market_cap_distrubition",
+    dag_id="market_cap_distribution",
     schedule=None,
     catchup=False,
     params={
@@ -13,7 +13,7 @@ from utils import spark_submit, HDFS_HOST, MONGO_HOST, transform_raw_csv_data
     },
     tags=["batch"],
 )
-def market_cap_distrubition():
+def market_cap_distribution():
 
     @task.bash
     def transform_data(**context) -> str:
@@ -23,7 +23,7 @@ def market_cap_distrubition():
         return transform_raw_csv_data()
     
     @task.bash
-    def calculate_market_cap_distrubition(**context):
+    def calculate_market_cap_distribution(**context):
         params = context["params"]
         start_date = params["start_date"]
         end_date = params["end_date"]
@@ -35,6 +35,6 @@ def market_cap_distrubition():
         command = spark_submit("my_jobs/market_cap_distrubition.py", packages=["org.mongodb.spark:mongo-spark-connector_2.13:10.6.0"], args=[historical_data, coins_data, start_date, end_date, number_of_coins, mongo_host, mongo_db])
         return command
     
-    transform_data() >> calculate_market_cap_distrubition()
+    transform_data() >> calculate_market_cap_distribution()
 
-market_cap_distrubition()
+market_cap_distribution()
